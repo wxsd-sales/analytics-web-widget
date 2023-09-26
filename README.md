@@ -2,8 +2,7 @@
 
 This is a Webex Device Web Widget which displays the local devices Room Analytics Data on the main display
 
-
-![download (11)](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/6d132c96-d924-403a-899d-6be4643db46c)
+![download (11)](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/2dda89e0-8858-4095-913e-c527e3009b9a)
 
 
 ## Overview
@@ -33,23 +32,30 @@ As the connection to the device is local and not over Cloud xAPI. This Widget wi
 
 ### Installation Steps:
 1.  Log into your Webex Devices web interface
-2.  Set WebEngine Mode to ```On``` and AllowDeviceCertificate to ```True```:
-![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/afdf2941-4ce3-4510-bbc9-f9e2660e27aa)
+2.  Set WebEngine Mode to ```On``` and AllowDeviceCertificate to ```True```
+
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/45b2af0b-31c7-4fd4-8086-f1e57dd1d3f1)
+
 
 3.  Create a local account on the device with ```user``` and ```integrator``` roles and disable the password reset requirement. Note the username and password for the next step
-![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/709720de-1aef-4820-aabb-d3c2b88d664c)
+
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/ba0c466a-e0d1-4f00-93ac-1bf44688a493)
+
 4. Create a Web Widget using the UI Extension page and enter the URL for the Web Widget and include the username and password within the URL Parameters.
 ```
-https://wxsd-sales.github.io/kiosk-demos/analytics-web-widget/widget.html?username=webwidget&password=Cisco123
+https://wxsd-sales.github.io/analytics-web-widget/widget.html?username=webwidget&password=Cisco123
 ```
 
-![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/9dc36a25-0288-4775-870e-ed15e0847c44)
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/29cdc8d8-ace4-4f39-9b65-b531cb8ef7f8)
 
-![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/5358e8ad-edde-469d-8a51-0c5e67d9c2d0)
+
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/69b6426b-b37e-42f0-ad07-cebd0579d028)
+
 
 5. Upload the new Web Widget to the device by clicking on the blue upload icon
 
-![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/5bbf81d4-b05c-4ed2-a27e-5ee37d023728)
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/dd615b03-df97-4830-a7e7-dbade263eb45)
+
 
 
     
