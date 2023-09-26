@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script
+      src="https://kit.fontawesome.com/33539b0b8b.js"
+      crossorigin="anonymous"
+    ></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/jsxapi@5.1.1/dist/jsxapi.js"></script>
+  </head>
+  <body>
+    <section class="hero is-dark is-fullheight">
+      <!-- Hero head: will stick at the top -->
+      <div class="hero-head has-text-centered">
+        <p class="heading is-size-2 pt-3" >Device Analytics</p>
+     
+      </div>
+      <!-- Hero content: will be in the middle -->
+      <div class="hero-body py-2">
+        <div class="container">
+          <div class="columns is-mobile">
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
+                    Temperature
+                  </p>
+
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-temperature-three-quarters"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <h1 class="title" id="temperature">...</h1>
+                </div>
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
+                    Humidity
+                  </p>
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-wind"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <h1 class="title" id="humidity">...</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="columns is-mobile">
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
+                    People Presence
+                  </p>
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-user-check"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <h1 class="title" id="peoplePresence">...</h1>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
+                    People Count
+                  </p>
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-people-group"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <h1 class="title" id="peopleCountCurrent">...</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="columns is-mobile">
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
+                    Space Capacity
+                  </p>
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-users-viewfinder"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <h1 class="title" id="peopleCountCapacity">...</h1>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
+                    Close Proximity
+                  </p>
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-user-group"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <h1 class="title" id="closeProximiity">...</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="level">
+            <div class="level-item has-text-centered">
+              <p class="heading" id="status">....</p>
+            </div>
+          </nav>
+        </div>
+        <!-- Hero footer: will stick at the bottom -->
+        <div class="hero-foot" />
+      </div>
+    </section>
+
+    <script>
+      const temperature = document.getElementById("temperature");
+      const humidity = document.getElementById("humidity");
+      const peoplePresence = document.getElementById("peoplePresence");
+      const peopleCountCurrent = document.getElementById("peopleCountCurrent");
+      const peopleCountCapacity = document.getElementById(
+        "peopleCountCapacity"
+      );
+      const closeProximiity = document.getElementById("closeProximiity");
+
+      const status = document.getElementById("status");
+
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const username = urlParams.get("username");
+      const password = urlParams.get("password");
+
+      console.log(username, password);
+      
+      if (username && password){
+        console.log(`URL Parameters Found - Connecting to Device`);
+        status.innerHTML = `URL Parameters Found - Connecting to Device`;
+        connectToDevice();
+      } else {
+        status.innerHTML = "Missing Local Account Parameters";
+      }
+
+      function convertTemp(celc) {
+        const far = (celc * 9.0) / 5.0 + 32.0;
+        return Math.round(far) + "°F " + celc + "°C";
+      }
+      
+      function connectToDevice() {
+        
+        jsxapi
+          .connect("localhost", {
+            username: username,
+            password: password,
+          })
+          .on("error", (error) => {
+
+            if(error == 'WebSocket closed unexpectedly'){
+              console.log('WebSocket closed, reconnecting');
+              setTimeout(connectToDevice, 1000);
+            } else {
+              
+              if(error == undefined){
+                console.error('JSXAPI Error [undefined] - taking no action until the WebSocket has been closed')
+              } else {
+                console.error('Error', JSON.stringify(error));
+                status.innerHTML = `Error [${error}]`;
+              }
+              
+            }
+            
+          })
+          .on("ready", async (xapi) => {
+            console.log(`Connected to Device`);
+            status.innerHTML = `Connected to Device`;
+
+            temperature.innerHTML = convertTemp(await xapi.Status.RoomAnalytics.AmbientTemperature.get());
+            humidity.innerHTML =
+              await xapi.Status.RoomAnalytics.RelativeHumidity.get();
+            peoplePresence.innerHTML =
+              await await xapi.Status.RoomAnalytics.PeoplePresence.get();
+            peopleCountCurrent.innerHTML =
+              await await xapi.Status.RoomAnalytics.PeopleCount.Current.get();
+            peopleCountCapacity.innerHTML =
+              await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get();
+            closeProximiity.innerHTML =
+              await xapi.Status.RoomAnalytics.Engagement.CloseProximity.get();
+
+            xapi.Status.RoomAnalytics.AmbientTemperature.on(value=>{
+              temperature.innerHTML = convertTemp(value);
+            });
+
+            xapi.Status.RoomAnalytics.RelativeHumidity.on(value=>{
+              humidity.innerHTML = value;
+            });
+
+           xapi.Status.RoomAnalytics.PeoplePresence.on(value=>{
+              peoplePresence.innerHTML = value;
+            });
+
+            xapi.Status.RoomAnalytics.PeopleCount.Current.on(value=>{
+              peopleCountCurrent.innerHTML = value;
+            });
+
+            xapi.Status.RoomAnalytics.PeopleCount.Capacity.on(value=>{
+              peopleCountCapacity.innerHTML = value;
+            });
+
+            xapi.Status.RoomAnalytics.Engagement.CloseProximity.on(value=>{
+              closeProximiity.innerHTML = value;
+            });
+        })
+
+      } 
+    </script>
+  </body>
+</html>
