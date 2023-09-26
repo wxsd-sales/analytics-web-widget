@@ -21,8 +21,7 @@
     <section class="hero is-dark is-fullheight">
       <!-- Hero head: will stick at the top -->
       <div class="hero-head has-text-centered">
-        <p class="heading is-size-2 pt-3" >Device Analytics</p>
-     
+        <p class="heading is-size-2 pt-3">Device Analytics</p>
       </div>
       <!-- Hero content: will be in the middle -->
       <div class="hero-body py-2">
@@ -154,9 +153,11 @@
       const username = urlParams.get("username");
       const password = urlParams.get("password");
 
+      let connected = false;
+
       console.log(username, password);
-      
-      if (username && password){
+
+      if (username && password) {
         console.log(`URL Parameters Found - Connecting to Device`);
         status.innerHTML = `URL Parameters Found - Connecting to Device`;
         connectToDevice();
@@ -168,36 +169,41 @@
         const far = (celc * 9.0) / 5.0 + 32.0;
         return Math.round(far) + "°F " + celc + "°C";
       }
-      
+
       function connectToDevice() {
-        
         jsxapi
           .connect("localhost", {
             username: username,
             password: password,
           })
           .on("error", (error) => {
-
-            if(error == 'WebSocket closed unexpectedly'){
-              console.log('WebSocket closed, reconnecting');
-              setTimeout(connectToDevice, 1000);
+            if (error == "WebSocket closed unexpectedly") {
+              console.log("WebSocket closed, reconnecting");
+              if (connected) {
+                connected = false;
+                setTimeout(connectToDevice, 1000);
+              }
             } else {
-              
-              if(error == undefined){
-                console.error('JSXAPI Error [undefined] - taking no action until the WebSocket has been closed')
+              if (error == undefined && !connected) {
+                status.innerHTML = "Error Connecting to Device";
+              } else if (error == undefined && connected) {
+                console.log(
+                  "JSXAPI Error [undefined] - taking no action until the WebSocket has been closed"
+                );
               } else {
-                console.error('Error', JSON.stringify(error));
+                console.error("Error", JSON.stringify(error));
                 status.innerHTML = `Error [${error}]`;
               }
-              
             }
-            
           })
           .on("ready", async (xapi) => {
+            connected = true;
             console.log(`Connected to Device`);
             status.innerHTML = `Connected to Device`;
 
-            temperature.innerHTML = convertTemp(await xapi.Status.RoomAnalytics.AmbientTemperature.get());
+            temperature.innerHTML = convertTemp(
+              await xapi.Status.RoomAnalytics.AmbientTemperature.get()
+            );
             humidity.innerHTML =
               await xapi.Status.RoomAnalytics.RelativeHumidity.get();
             peoplePresence.innerHTML =
@@ -209,32 +215,31 @@
             closeProximiity.innerHTML =
               await xapi.Status.RoomAnalytics.Engagement.CloseProximity.get();
 
-            xapi.Status.RoomAnalytics.AmbientTemperature.on(value=>{
+            xapi.Status.RoomAnalytics.AmbientTemperature.on((value) => {
               temperature.innerHTML = convertTemp(value);
             });
 
-            xapi.Status.RoomAnalytics.RelativeHumidity.on(value=>{
+            xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
               humidity.innerHTML = value;
             });
 
-           xapi.Status.RoomAnalytics.PeoplePresence.on(value=>{
+            xapi.Status.RoomAnalytics.PeoplePresence.on((value) => {
               peoplePresence.innerHTML = value;
             });
 
-            xapi.Status.RoomAnalytics.PeopleCount.Current.on(value=>{
+            xapi.Status.RoomAnalytics.PeopleCount.Current.on((value) => {
               peopleCountCurrent.innerHTML = value;
             });
 
-            xapi.Status.RoomAnalytics.PeopleCount.Capacity.on(value=>{
+            xapi.Status.RoomAnalytics.PeopleCount.Capacity.on((value) => {
               peopleCountCapacity.innerHTML = value;
             });
 
-            xapi.Status.RoomAnalytics.Engagement.CloseProximity.on(value=>{
+            xapi.Status.RoomAnalytics.Engagement.CloseProximity.on((value) => {
               closeProximiity.innerHTML = value;
             });
-        })
-
-      } 
+          });
+      }
     </script>
   </body>
 </html>
