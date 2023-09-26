@@ -1,108 +1,80 @@
-<!-- __________________________________________________ Basic Repo Steps ___________________________________________________________________________ -->
+# Analytics Web Widget
+
+This is a Webex Device Web Widget which displays the local devices Room Analytics Data on the main display
 
 
-<!-- # Repo-Template
-This is an Internal WXSD Template to be used for GitHub Repos moving forward. Follow the steps below: For extended details, visit https://cisco.sharepoint.com/:w:/r/sites/WXSD-WebexSolutionsDevelopment/Shared%20Documents/Onboarding%20Instructions%20%26%20Guides/Github%20%26%20Security/Github%20Readme%20Detailed%20Standards.docx?d=wba3225a5102341cf874d319d3f334b9b&csf=1&web=1&e=yggr2S 
-
-
-
-<!--   Step 1) Name your repository: Repo Name must ALWAYS end with "bot", "embeddedapp: or "macro"
-      Examples: "<insert repo name>-bot", "<insert repo name>-embeddedapp", "<insert repo name>macro"
-
-      
-
-~3 words, kebab case, use words to indicate what it does. Visit https://github.com/wxsd-sales/readme-template/blob/master/README.md for more details  
--->
-
-<!--  Step 2) Add One sentence description to your repository: Copy/Paste from Webex Labs Card sentence.
-       Example: "Redirect an Auto Attendant caller to an SMS conversation to alleviate Call Queue Agent responsibilities."
--->
-
-<!--  Step 3) Add at least 1 tag to the repo: Indicating if it’s a “bot”, “macro” or “embeddedapp”.       
-                 *Additional tags are allowed: should be lowercase and hyphenated for spaces.
-                Repo does not use “macros” as a tag (use “macro” instead)
--->
-
-<!--  Step 4) MAKE SURE an MIT license is included in your Repository. If another license is needed, verify with management. This is for legal reasons.
--->
-
-<!--  Step 4) Use following Template to copy/paste your details below in place of the directions 
-Make sure you include the "Keep this here" portions (it is for legal, and security infosec reasons).
--->
-
-<!-- _________________________________________________________ Actual Template Starts Below ___________________________________________________________ -->
-
-
-# Insert Repo Name Here
- 1 short main sentence - can use Webex Labs card sentence. Example: "Establish conversations between Apple Messages for Business users and Webex App users.
-
-Insert a paragraph (3-4 sentences). 1 Sentence on **WHAT** the project is about. Insert 1 Sentence on  **WHY** it exists and 1 Sentence on **WHO** it is for.  
-
- <!--- Insert a screenshot, gif or image below that shows a little about your Demo/PoC -->
- ![image/gif](https://ezgif.com)
+![download (11)](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/6d132c96-d924-403a-899d-6be4643db46c)
 
 
 ## Overview
 
-Go into detail about the implementation.   3-4 Sentences
-**HOW** the implementation works. You need not give end-to-end details but an overview.
+This Web Widget connects to the local device using a WebSocket and displays the devices Room Analytics data on the devices main display.
 
+The Widget itself is a simple HTML and JavaScript file which uses the JSXAPI library to establish the WebSocket connection, initially reads the sensor values and the subscribes to them for changes.
 
+More information on the JSXAPI library here: https://github.com/cisco-ce/jsxapi
 
-### Flow Diagram
+In order for the Widget to open the WebSocket connection, it requires local account credentials for that device which are passed to the Widget in URL parameters.
 
-<!-- *MANDATORY*  Insert Your Flow Diagram Here (if small PoC, alternative option is to include break down how it works here instead of diagram) -->
-![image/gif](insert img link here)
-
+As the connection to the device is local and not over Cloud xAPI. This Widget will work on Webex Devices registered in both Shared and Personal modes.
 
 
 ## Setup
 
 ### Prerequisites & Dependencies: 
 
-- Is this dependant on having another repo
-- Insert pre-requisites in bullets
-- Insert pre-requisite here  Also state any assumptions that you may have made about the user.
-- Limit nested bullets
+- This Web Widget has been built only for the Webex Desk Series 
+- RoomOS 11.8 or greater
+- Web admin access to the device to upload the macro.
+- (optional): Web Server to host your own copy of this Widget for customisation
 
 
 <!-- GETTING STARTED -->
 
 ### Installation Steps:
-1.  Include step one here
-    ```sh
-    insert line of code here if applicable
-    ```
-2.  Insert step two here
-    Insert screenshot, if applicable
+1.  Log into your Webex Devices web interface
+2.  Set WebEngine Mode to ```On``` and AllowDeviceCertificate to ```True```:
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/afdf2941-4ce3-4510-bbc9-f9e2660e27aa)
+
+3.  Create a local account on the device with ```user``` and ```integrator``` roles and disable the password reset requirement. Note the username and password for the next step
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/709720de-1aef-4820-aabb-d3c2b88d664c)
+4. Create a Web Widget using the UI Extension page and enter the URL for the Web Widget and include the username and password within the URL Parameters.
+```
+https://wxsd-sales.github.io/kiosk-demos/analytics-web-widget/widget.html?username=webwidget&password=Cisco123
+```
+
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/9dc36a25-0288-4775-870e-ed15e0847c44)
+
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/5358e8ad-edde-469d-8a51-0c5e67d9c2d0)
+
+5. Upload the new Web Widget to the device by clicking on the blue upload icon
+
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/5bbf81d4-b05c-4ed2-a27e-5ee37d023728)
+
+
     
-    
+## Validation
+
+Validated Hardware:
+
+* Desk Pro
+
+This Web Widget should work on other Webex Devices but has not been validated at this time.
     
 ## Demo
 
-<!-- Insert link to the website below (if deployed). -->
-Check out our live demo, available [here](<insert link>)!
-
-<!-- Keep the following statement -->
 *For more demos & PoCs like this, check out our [Webex Labs site](https://collabtoolbox.cisco.com/webex-labs).
 
 
-<!-- Update your vidcast title, video screenshot, vidcast/youtube link & name -->
-[![Your Video Title ](assets/peer_support_main.PNG)](https://www.youtube.com/watch?v=SqZhiC8jHhU&t=10s, "<insert demo name here>")
-
-
-
 ## License
-<!-- MAKE SURE an MIT license is included in your Repository. If another license is needed, verify with management. This is for legal reasons.--> 
 
-<!-- Keep the following statement -->
 All contents are licensed under the MIT license. Please see [license](LICENSE) for details.
 
 
 ## Disclaimer
-<!-- Keep the following here -->  
- Everything included is for demo and Proof of Concept purposes only. Use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex usecases, but are not Official Cisco Webex Branded demos.
+ 
+Everything included is for demo and Proof of Concept purposes only. Use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex use cases, but are not Official Cisco Webex Branded demos.
 
 
 ## Questions
-Please contact the WXSD team at [wxsd@external.cisco.com](mailto:wxsd@external.cisco.com?subject=RepoName) for questions. Or, if you're a Cisco internal employee, reach out to us on the Webex App via our bot (globalexpert@webex.bot). In the "Engagement Type" field, choose the "API/SDK Proof of Concept Integration Development" option to make sure you reach our team. 
+Please contact the WXSD team at [wxsd@external.cisco.com](mailto:wxsd@external.cisco.com?subject=analytics-web-widget) for questions. Or, if you're a Cisco internal employee, reach out to us on the Webex App via our bot (globalexpert@webex.bot). In the "Engagement Type" field, choose the "API/SDK Proof of Concept Integration Development" option to make sure you reach our team. 
