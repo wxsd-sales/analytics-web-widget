@@ -9,11 +9,11 @@ This is a Webex Device Web Widget which displays the local devices Room Analytic
 
 This Web Widget connects to the local device using a WebSocket and displays the devices Room Analytics data on the devices main display.
 
-The Widget itself is a simple HTML and JavaScript file which uses the JSXAPI library to establish the WebSocket connection, initially reads the sensor values and the subscribes to them for changes.
+The Widget itself is a simple HTML file with basic JavaScript uses the JSXAPI library to establish the WebSocket connection, initially reads the sensor values and the subscribes to them for changes.
 
 More information on the JSXAPI library here: https://github.com/cisco-ce/jsxapi
 
-In order for the Widget to open the WebSocket connection, it requires local account credentials for that device which are passed to the Widget in URL parameters.
+In order for the Widget to open the WebSocket connection, it requires local account credentials for device which are passed to the Widget via URL parameters.
 
 As the connection to the device is local and not over Cloud xAPI. This Widget will work on Webex Devices registered in both Shared and Personal modes.
 
