@@ -157,12 +157,13 @@
 
       console.log(username, password);
 
+      // Only attempt to connect to the local host if URL parameters are present
       if (username && password) {
-        console.log(`URL Parameters Found - Connecting to Device`);
+        console.log(`Connecting to Device`);
         status.innerHTML = `URL Parameters Found - Connecting to Device`;
         connectToDevice();
       } else {
-        status.innerHTML = "Missing Local Account Parameters";
+        status.innerHTML = "Missing Account URL Parameters";
       }
 
       function convertTemp(celc) {
@@ -177,14 +178,15 @@
             password: password,
           })
           .on("error", (error) => {
-            if (error == "WebSocket closed unexpectedly") {
+            // Handle connection issues and restore websocket if closed
+            if (error == "WebSocket closed unexpectedly" && connected) {
+              // Only attempt to reconnect if previously connected
               console.log("WebSocket closed, reconnecting");
-              if (connected) {
-                connected = false;
-                setTimeout(connectToDevice, 1000);
-              }
+              connected = false;
+              setTimeout(connectToDevice, 1000);
             } else {
               if (error == undefined && !connected) {
+                // Display error when failed to create initial connection
                 status.innerHTML = "Error Connecting to Device";
               } else if (error == undefined && connected) {
                 console.log(
@@ -197,31 +199,91 @@
             }
           })
           .on("ready", async (xapi) => {
+            // Once connected, check for connected In-Room Navigators and then
+            // get initial sensor values and subscribe to changes there after
+
             connected = true;
             console.log(`Connected to Device`);
             status.innerHTML = `Connected to Device`;
 
-            temperature.innerHTML = convertTemp(
-              await xapi.Status.RoomAnalytics.AmbientTemperature.get()
-            );
-            humidity.innerHTML =
-              await xapi.Status.RoomAnalytics.RelativeHumidity.get();
+            const navID = await inRoomNavigator(xapi);
+            console.log("NavID", navID);
+
+            if (navID != -1) {
+              console.log(
+                `Getting Temperature and Humidity values from In-Room Navigator [${navID}]`
+              );
+              temperature.innerHTML = convertTemp(
+                await xapi.Status.Peripherals.ConnectedDevice[
+                  navID
+                ].RoomAnalytics.AmbientTemperature.get()
+              );
+              humidity.innerHTML =
+                await xapi.Status.Peripherals.ConnectedDevice[
+                  navID
+                ].RoomAnalytics.RelativeHumidity.get();
+
+              xapi.Status.RoomAnalytics.AmbientTemperature.on((value) => {
+                temperature.innerHTML = convertTemp(value);
+              });
+
+              xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
+                humidity.innerHTML = value;
+              });
+            } else {
+              console.log(
+                `No In-Room Navigators found, attempting to get data from main device`
+              );
+              try {
+                const temp =
+                  await xapi.Status.RoomAnalytics.AmbientTemperature.get();
+                temperature.innerHTML = convertTemp(temp);
+                xapi.Status.RoomAnalytics.AmbientTemperature.on((value) => {
+                  temperature.innerHTML = convertTemp(value);
+                });
+              } catch {
+                console.log(`Temperature sensor not available on main device`);
+                temperature.innerHTML = "N/A";
+              }
+
+              try {
+                humidity.innerHTML =
+                  await xapi.Status.RoomAnalytics.RelativeHumidity.get();
+                xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
+                  humidity.innerHTML = value;
+                });
+              } catch {
+                console.log(`Humidity sensor not available on main device`);
+                humidity.innerHTML = "N/A";
+              }
+            }
+
+            try {
+              xapi.Config.RoomAnalytics.PeopleCountOutOfCall.set("On");
+              xapi.Config.RoomAnalytics.PeoplePresenceDetector.set("On");
+            } catch {
+              console.warn("Could not enable PeopleCountOutOfCall");
+            }
+
             peoplePresence.innerHTML =
               await await xapi.Status.RoomAnalytics.PeoplePresence.get();
             peopleCountCurrent.innerHTML =
               await await xapi.Status.RoomAnalytics.PeopleCount.Current.get();
             peopleCountCapacity.innerHTML =
               await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get();
-            closeProximiity.innerHTML =
-              await xapi.Status.RoomAnalytics.Engagement.CloseProximity.get();
 
-            xapi.Status.RoomAnalytics.AmbientTemperature.on((value) => {
-              temperature.innerHTML = convertTemp(value);
-            });
+            try {
+              closeProximiity.innerHTML =
+                await xapi.Status.RoomAnalytics.Engagement.CloseProximity.get();
 
-            xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
-              humidity.innerHTML = value;
-            });
+              xapi.Status.RoomAnalytics.Engagement.CloseProximity.on(
+                (value) => {
+                  closeProximiity.innerHTML = value;
+                }
+              );
+            } catch {
+              closeProximiity.innerHTML = "N/A";
+            }
 
             xapi.Status.RoomAnalytics.PeoplePresence.on((value) => {
               peoplePresence.innerHTML = value;
@@ -234,10 +296,28 @@
             xapi.Status.RoomAnalytics.PeopleCount.Capacity.on((value) => {
               peopleCountCapacity.innerHTML = value;
             });
+          });
+      }
 
-            xapi.Status.RoomAnalytics.Engagement.CloseProximity.on((value) => {
-              closeProximiity.innerHTML = value;
+      function inRoomNavigator(xapi) {
+        return xapi.Status.Peripherals.ConnectedDevice.get()
+          .then((devices) => {
+            const navigators = devices.filter((d) => {
+              return (
+                d.Name.endsWith("Navigator") &&
+                d.Type == "TouchPanel" &&
+                d.Location == "InsideRoom"
+              );
             });
+
+            if (navigators.length == 0) {
+              return -1;
+            } else {
+              return navigators.pop().id;
+            }
+          })
+          .catch((e) => {
+            return -1;
           });
       }
     </script>
