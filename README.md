@@ -33,15 +33,18 @@ As the connection to the device is local and not over Cloud xAPI. This Widget wi
 ### Installation Steps:
 1.  Log into your Webex Devices web interface
 2.  Set WebEngine Mode to ```On``` and AllowDeviceCertificate to ```True```
-
 ![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/45b2af0b-31c7-4fd4-8086-f1e57dd1d3f1)
 
+3. Set NetworkService CommonProxy to ```Enabled```
+![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/137b7349-4dab-49c6-9aea-5f13be2f99e4)
 
-3.  Create a local account on the device with ```user``` and ```integrator``` roles and disable the password reset requirement. Note the username and password for the next step
 
+
+4.  Create a local account on the device with ```user``` and ```integrator``` roles and disable the password reset requirement. Note the username and password for the next step
 ![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/ba0c466a-e0d1-4f00-93ac-1bf44688a493)
 
-4. Create a Web Widget using the UI Extension page and enter the URL for the Web Widget and include the username and password within the URL Parameters.
+
+5. Create a Web Widget using the UI Extension page and enter the URL for the Web Widget and include the username and password within the URL Parameters.
 ```
 https://wxsd-sales.github.io/analytics-web-widget/widget.html?username=webwidget&password=Cisco123
 ```
@@ -52,7 +55,7 @@ https://wxsd-sales.github.io/analytics-web-widget/widget.html?username=webwidget
 ![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/69b6426b-b37e-42f0-ad07-cebd0579d028)
 
 
-5. Upload the new Web Widget to the device by clicking on the blue upload icon
+6. Upload the new Web Widget to the device by clicking on the blue upload icon
 
 ![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/dd615b03-df97-4830-a7e7-dbade263eb45)
 
