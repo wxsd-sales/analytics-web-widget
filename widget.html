@@ -152,6 +152,7 @@
       const urlParams = new URLSearchParams(queryString);
       const username = urlParams.get("username");
       const password = urlParams.get("password");
+      let ipAddress = urlParams.get("ipAddress");
 
       let connected = false;
 
@@ -159,7 +160,8 @@
 
       // Only attempt to connect to the local host if URL parameters are present
       if (username && password) {
-        console.log(`Connecting to Device`);
+        if(!ipAddress) ipAddress = 'localhost';
+        console.log(`Connecting to Device`, ipAddress);
         status.innerHTML = `URL Parameters Found - Connecting to Device`;
         connectToDevice();
       } else {
