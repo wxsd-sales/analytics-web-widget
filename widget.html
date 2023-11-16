@@ -160,7 +160,9 @@
 
       // Only attempt to connect to the local host if URL parameters are present
       if (username && password) {
-        if(!ipAddress) ipAddress = 'localhost';
+        if(ipAddress == undefined){
+           ipAddress = 'localhost';
+        }
         console.log(`Connecting to Device`, ipAddress);
         status.innerHTML = `URL Parameters Found - Connecting to Device`;
         connectToDevice();
