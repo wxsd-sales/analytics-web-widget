@@ -272,9 +272,11 @@
             peoplePresence.innerHTML =
               await await xapi.Status.RoomAnalytics.PeoplePresence.get();
             peopleCountCurrent.innerHTML =
-              await await xapi.Status.RoomAnalytics.PeopleCount.Current.get();
+              await await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
+              .then(result => (result == -1 ) ? '0' : result))
             peopleCountCapacity.innerHTML =
-              await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get();
+              await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
+              .then(result => (result == -1 ) ? 'Not Set' : result)
 
             try {
               closeProximiity.innerHTML =
@@ -294,11 +296,11 @@
             });
 
             xapi.Status.RoomAnalytics.PeopleCount.Current.on((value) => {
-              peopleCountCurrent.innerHTML = value;
+              peopleCountCurrent.innerHTML = (result == -1 ) ? '0' : result);
             });
 
             xapi.Status.RoomAnalytics.PeopleCount.Capacity.on((value) => {
-              peopleCountCapacity.innerHTML = value;
+              peopleCountCapacity.innerHTML = (result == -1 ) ? 'Not Set' : result);
             });
           });
       }
