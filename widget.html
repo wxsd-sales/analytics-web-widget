@@ -232,7 +232,7 @@
               });
 
               xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
-                humidity.innerHTML = value;
+                humidity.innerHTML = value + "%";
               });
             } else {
               console.log(
@@ -254,7 +254,7 @@
                 humidity.innerHTML =
                   await xapi.Status.RoomAnalytics.RelativeHumidity.get();
                 xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
-                  humidity.innerHTML = value;
+                  humidity.innerHTML = value+"%";
                 });
               } catch {
                 console.log(`Humidity sensor not available on main device`);
@@ -273,10 +273,10 @@
               await await xapi.Status.RoomAnalytics.PeoplePresence.get();
             peopleCountCurrent.innerHTML =
               await await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
-              .then(result => (result == -1 ) ? '0' : result)
+              .then(value => (value == -1 ) ? '0' : value)
             peopleCountCapacity.innerHTML =
               await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
-              .then(result => (result == -1 ) ? 'Not Set' : result)
+              .then(value => (value == -1 ) ? 'Not Set' : value)
 
             try {
               closeProximiity.innerHTML =
@@ -296,11 +296,11 @@
             });
 
             xapi.Status.RoomAnalytics.PeopleCount.Current.on((value) => {
-              peopleCountCurrent.innerHTML = (result == -1 ) ? '0' : result;
+              peopleCountCurrent.innerHTML = (value == -1 ) ? '0' : value;
             });
 
             xapi.Status.RoomAnalytics.PeopleCount.Capacity.on((value) => {
-              peopleCountCapacity.innerHTML = (result == -1 ) ? 'Not Set' : result;
+              peopleCountCapacity.innerHTML = (value == -1 ) ? 'Not Set' : value;
             });
           });
       }
