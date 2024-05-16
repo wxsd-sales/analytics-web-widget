@@ -217,21 +217,18 @@
               console.log(
                 `Getting Temperature and Humidity values from In-Room Navigator [${navID}]`
               );
-              temperature.innerHTML = convertTemp(
-                await xapi.Status.Peripherals.ConnectedDevice[
-                  navID
-                ].RoomAnalytics.AmbientTemperature.get()
-              );
-              humidity.innerHTML =
-                await xapi.Status.Peripherals.ConnectedDevice[
-                  navID
-                ].RoomAnalytics.RelativeHumidity.get();
+
+              const tValue = await xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.AmbientTemperature.get()
+              temperature.innerHTML = convertTemp(tValue)
+
+              const hValue = await xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.RelativeHumidity.get();
+              humidity.innerHTML = hValue + "%";
 
               xapi.Status.RoomAnalytics.AmbientTemperature.on((value) => {
                 temperature.innerHTML = convertTemp(value);
               });
 
-              xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
+              xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.RelativeHumidity.on((value) => {
                 humidity.innerHTML = value + "%";
               });
             } else {
@@ -251,8 +248,8 @@
               }
 
               try {
-                humidity.innerHTML =
-                  await xapi.Status.RoomAnalytics.RelativeHumidity.get();
+                const value = await xapi.Status.RoomAnalytics.RelativeHumidity.get();
+                humidity.innerHTML = value+"%";
                 xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
                   humidity.innerHTML = value+"%";
                 });
