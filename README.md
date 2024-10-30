@@ -44,10 +44,12 @@ As the connection to the device is local and not over Cloud xAPI. This Widget wi
 ![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/ba0c466a-e0d1-4f00-93ac-1bf44688a493)
 
 
-5. Create a Web Widget using the UI Extension page and enter the URL for the Web Widget and include the username and password within the URL Parameters.
-```
-https://wxsd-sales.github.io/analytics-web-widget/widget.html?username=webwidget&password=Cisco123
-```
+5. Create a Web Widget using the UI Extension page and enter the URL for the Web Widget and include the username and password the Devices LAN IP Address within the URL Parameters.
+
+    Example:
+    ```
+    https://wxsd-sales.github.io/analytics-web-widget/widget.html?username=webwidget&password=Cisco123&ipAddress=10.0.0.1
+    ```
 
 ![image](https://github.com/wxsd-sales/analytics-web-widget/assets/21026209/29cdc8d8-ace4-4f39-9b65-b531cb8ef7f8)
 
